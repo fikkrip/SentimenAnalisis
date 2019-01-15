@@ -10,10 +10,11 @@ class TextMining_model extends CI_Model
         $word = strtolower($word);
         $word = preg_replace('((www\.[^\s]+)|(https?://[^\s]+))', '', $word); //hapus url
         $word = preg_replace('(@[^\s]+)','', $word); // hapus mention
-        $word = str_replace(array('.',',',"!","?",";","/","_","`","~"),array('','','','','','','','','','','',''), $word);
+        $word = str_replace(array('.',',',"!","?",";","/","_","`","~","(",")"),array('','','','','','','','','','','',''), $word);
         // $word = str_replace(array('.',',',"'","!"),array('','',"''",''), $word);
         // $word = preg_replace('([\s]+)', '', $word); // hapus withe spaces
         $word = preg_replace('(#([^\s]+))', '', $word); // hapus #
         return $word;
     }
+
 }

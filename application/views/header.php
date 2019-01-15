@@ -17,9 +17,21 @@
                 <ul class="nav-menu">
                     <li><a href="<?php echo base_url().'page'?>">DASHBOARD</a></li>
                     <?php if($this->session->userdata('masuk') == TRUE):?>
-                        <li><a href="<?php echo base_url().'textmining'?>">TEXT MINING</a></li>
-                        <li><a href="<?php echo base_url().'page'?>">SENTIMENT ANALYSIS</a></li>
-                        <li><a href="<?php echo base_url().'login/logout'?>">Sign Out<b> [
+                        <li class="active"><a href="<?php echo base_url().'sentimentproduk'?>">SENTIMENT SMARTPHONE</a></li>
+                        <li class="menu-has-children">
+                            <a>MASTER</a>
+                            <ul>
+                                <li class="active"><a href="<?php echo base_url().'smartphone'?>">DATA SMARTPHONE</a></li>
+                            </ul>
+                        </li>
+                        <li class="menu-has-children">
+                            <a>UJI COBA</a>
+                            <ul>
+                                <li class="active"><a href="<?php echo base_url().'textmining'?>">TEXT MINING</a></li>
+                                <li class="active"><a href="<?php echo base_url().'sentimentanalysis'?>">SENTIMENT ANALYSIS</a></li>
+                            </ul>
+                        </li>
+                        <li class="active"><a href="<?php echo base_url().'login/logout'?>">Sign Out<b> [
                                     <?php
                                         $kalimat = explode(" ", $this->session->userdata('ses_nama'));
                                         if(sizeof($kalimat) > 1){
@@ -29,7 +41,7 @@
                                         }
                                     ?> ] </b> </a></li>
                     <?php else:?>
-                        <li><a href="<?php echo base_url().'login'?>">LOGIN ADMIN</a></li>
+                        <li class="active"><a href="<?php echo base_url().'login'?>">LOGIN ADMIN</a></li>
                     <?php endif; ?>
                 </ul>
             </nav><!-- #nav-menu-container -->

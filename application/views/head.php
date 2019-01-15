@@ -29,4 +29,5 @@ CSS
 <link href="<?php echo base_url().'assets/repair/css/animate.min.css'?>" rel="stylesheet">
 <link href="<?php echo base_url().'assets/repair/css/owl.carousel.css'?>" rel="stylesheet">
 <link href="<?php echo base_url().'assets/repair/css/main.css'?>" rel="stylesheet">
+<link href="<?php echo base_url().'assets/js/bootstrap-toastr/toastr.min.css'?>" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mada:300,400,600,700,800">

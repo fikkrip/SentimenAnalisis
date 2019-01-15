@@ -20,12 +20,12 @@ class Porter2 {
             'dying' => 'die',
             'lying' => 'lie',
             'tying' => 'tie',
-            'idly' => 'idl',
-            'gently' => 'gentl',
-            'ugly' => 'ugli',
-            'early' => 'earli',
-            'only' => 'onli',
-            'singly' => 'singl',
+            'idly' => 'idle',
+            'gently' => 'gentle',
+            'ugly' => 'ugly',
+            'early' => 'early',
+            'only' => 'only',
+            'singly' => 'single',
             'sky' => 'sky',
             'news' => 'news',
             'howe' => 'howe',
@@ -43,6 +43,8 @@ class Porter2 {
             'capitalisation' => 'capital',
             'resides' => 'reside',
             'battery' => 'battery',
+            'updated' => 'update',
+            'overheated' => 'overheat',
         );
 
         // Process exceptions.

@@ -112,7 +112,35 @@
 <script src="<?php echo base_url().'assets/repair/js/main.js'?>"></script>
 <script src="<?php echo base_url().'assets/js/moment.js'?>"></script>
 <script src="<?php echo base_url().'assets/js/moment-timezone.js'?>"></script>
+<script src="<?php echo base_url().'assets/js/bootstrap-toastr/toastr.min.js'?>"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.ui.min.js"></script>
+<script type="text/javascript">
+    var NotifikasiToast = function (data) {
+        if(!data)
+            return;
+        var type,msg,title;
+        if(!data.type){type = 'success';}else{type = data.type;}
+        if(!data.msg){msg = '';}else{msg = data.msg;}
+        if(!data.title){title = '';}else{title = data.title;}
+
+        toastr.options = {
+            closeButton: true,
+            debug: false,
+            positionClass: "toast-top-full-width",
+            onclick: null,
+            showDuration: "1000",
+            hideDuration: "1000",
+            timeOut: "3000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+        }
+
+        var $toast = toastr[type](msg, title);
+    }
+</script>
 
