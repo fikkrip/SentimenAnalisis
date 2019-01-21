@@ -83,6 +83,11 @@ class DataProduk_model extends CI_Model
                     Jumlah Sensor ".$d['m_produk_sensors']."<br>
                     Memori Internal ".$d['m_produk_mem_internal']." Gb <br>
                     Kamera ".$d['m_produk_camera']." Mp";
+            $r[4] = $d['data_pos'];
+            $r[5] = $d['data_net'];
+            $r[6] = $d['data_neg'];
+            $r[7] = $d['data_sentiment'];
+            $r[8] = '<a class="btn btn-info" href="sentimentproduk/detailhasil/'.$d['m_produk_id'].'">Detail Review</a>"';
             array_push($result, $r);
             $i++;
         }

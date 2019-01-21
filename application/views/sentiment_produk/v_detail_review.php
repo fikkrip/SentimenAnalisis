@@ -34,6 +34,7 @@
             <?php
             $i=0;
 //            var_dump($datareview->m_review_text);
+            if(!empty($datareview)){
             foreach($datareview as $row): ?>
                 <tr>
                     <td><?php echo $i+1; $i++;?></td>
@@ -43,7 +44,7 @@
                     <td><?php echo $row->m_review_index_net; ?></td>
                     <td><?php echo $row->m_review_sentiment; ?></td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endforeach; }?>
             </tbody>
         </table>
     </div>

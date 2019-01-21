@@ -39,6 +39,11 @@
                     <th width="250px">Nama Produk </th>
                     <th>Harga </th>
                     <th>Spesifikasi </th>
+                    <th>Data Pos </th>
+                    <th>Data Net </th>
+                    <th>Data Neg </th>
+                    <th>Sentiment </th>
+                    <th>Action </th>
                 </tr>
                 </thead>
 
@@ -67,6 +72,11 @@
                 'url': '//cdn.datatables.net/plug-ins/1.10.19/i18n/Indonesian.json'
             },
             "columns": [
+                {"orderable":false },
+                {"orderable":false },
+                {"orderable":false },
+                {"orderable":false },
+                {"orderable":false },
                 {"orderable":false },
                 {"orderable":false },
                 {"orderable":false },

@@ -21,6 +21,7 @@ class TextMining extends CI_Controller{
 
     function text_processing_proses()
     {
+//        $word = 'This phone has good camera quality and is supported by the latest AI technology. I was very impressed with this phone.';
         $word = $this->input->post('kata');
         $getstopword = $this->db->get('stopwords');
         $liststopword = array();
@@ -29,10 +30,12 @@ class TextMining extends CI_Controller{
         }
         $word = $this->textmining_model->preprocessing($word);
         $tokenizing = explode(" ", $word);
+        $tokenizing = array_unique($tokenizing);
         $stemming = array();
         $stopword = array();
         $lastword = array();
         $unknown = array();
+        $tagging = array();
         // echo $coba->stem('connecting');
         foreach ($tokenizing as $key => $value) {
             if (in_array($value, $liststopword)) { //jika stopword maka lewati
@@ -48,14 +51,25 @@ class TextMining extends CI_Controller{
             $cekkata = $this->db->query("select * from final_sentiword where final_sentiword_word = '".$value."'");
             if ($cekkata->num_rows() == 0) {
                 array_push($unknown, $value);
+
+                $cekunknown = $this->db->query("select normal_word from normalization where word = '".$value."'");
+                $cu = $cekunknown->result();
+                if ($cekunknown->num_rows() != 0) {
+                    array_push($tagging, array('kataawal'=>$value,'kataakhir'=>$cu[0]->normal_word));
+                    $value = $cu[0]->normal_word;
+                }
             }
             array_push($lastword, $value);
         }
+
         $data['tokenizing'] = $tokenizing;
         $data['stemming'] = $stemming;
         $data['stopword'] = $stopword;
         $data['unknown'] = $unknown;
+        $data['tagging'] = $tagging;
         $data['lastword'] = $lastword;
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
+
+
 }

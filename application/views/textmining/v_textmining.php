@@ -111,6 +111,16 @@
                         html+=unknownword;
                         //end tabel unknown
 
+                        //buat table tagging
+                        html += '<hr><b>Tagging</b><hr>';
+                        var taggingword = '<table class="table table-striped responsive-utilities jambo_table"><tr><td>Kata Awal</td><td>Kata Akhir</td></tr>';
+                        for(i=0;i<resp.tagging.length;i++){
+                            taggingword += '<tr><td>'+resp.tagging[i].kataawal+'</td><td>'+resp.tagging[i].kataakhir+'</td></tr>';
+                        }
+                        taggingword+= '</table>';
+                        html+=taggingword;
+                        //end tabel tagging
+
                         //buat table kata akhir
                         kolomjalan = 0;
                         html += '<hr><b>Final Word</b><hr>';
