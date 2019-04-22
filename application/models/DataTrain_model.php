@@ -2,6 +2,11 @@
 
 class DataTrain_model extends CI_Model
 {
+    function __construct(){
+        parent::__construct();
+        $this->load->library('Porter2');
+    }
+
     function text_classification_bayes_single($word='')
     {
         $result = array();
@@ -18,13 +23,29 @@ class DataTrain_model extends CI_Model
         $totalnett = (int)$this->db->query("select count(*) as jumlah from data_train where train_sentiment_desc = 'NETRAL'")->row()->jumlah;
 
         $word = explode(" ", $word);
+        $word2 = array_unique($word);
+
         $totalpos = 0;
         $totalneg = 0;
         $totalnet = 0;
-        foreach ($word as $key1 => $value1) {
+        foreach ($word2 as $key1 => $value1) {
             if (in_array($value1, $stopword)) { //jika stopword maka lewati
                 continue;
             }
+            $r_stem = $this->porter2->stem($value1);
+            if ($r_stem != $value1) {
+                $value1 = $r_stem;
+            }
+
+            $cekkata = $this->db->query("select * from final_sentiword where final_sentiword_word = '".$value1."'");
+            if ($cekkata->num_rows() == 0) {
+                $cekunknown = $this->db->query("select normal_word from normalization where word = '".$value1."'");
+                $cu = $cekunknown->result();
+                if ($cekunknown->num_rows() != 0) {
+                    $value1 = $cu[0]->normal_word;
+                }
+            }
+
             $ppos = (int)$this->db->query("select count(*) as jumlah from data_train where train_phrase like '%".str_replace("'", "''", $value1)."%' and train_sentiment_desc = 'POSITIF'")->row()->jumlah;
             $pneg = (int)$this->db->query("select count(*) as jumlah from data_train where train_phrase like '%".str_replace("'", "''", $value1)."%' and train_sentiment_desc = 'NEGATIF'")->row()->jumlah;
             $pnet = (int)$this->db->query("select count(*) as jumlah from data_train where train_phrase like '%".str_replace("'", "''", $value1)."%' and train_sentiment_desc = 'NETRAL'")->row()->jumlah;

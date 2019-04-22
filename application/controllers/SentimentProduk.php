@@ -109,7 +109,7 @@ class SentimentProduk extends CI_Controller{
     function testing($word='')
     {
         if (!$word) {
-            $word = 'Another mention for Apple Store: http://t.co/fiIOApKt - RT @floridamike Once again getting great customer service from the @apple #store ...';
+            $word = 'Another mention for Apple Store: http://t.co/fiIOApKt - RT @floridamike Once again getting great customer service from the @apple#store ...';
         }
         $word = strtolower($word);
         $word = preg_replace('((www\.[^\s]+)|(https?://[^\s]+))', 'URL', $word); //hapus url

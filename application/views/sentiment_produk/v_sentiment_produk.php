@@ -31,10 +31,10 @@
                     <label for="count">JUMLAH KOMENTAR:</label>
                     <input type="number" name="count" id="count" required class="form-control" placeholder="Masukkan jumlah komentar">
                 </div>
-                <div class="form-group col-md-12">
-                    <label for="tanggal">TANGGAL:</label>
-                    <input type="text" name="tgl" id="tanggal" required class="form-control date-picker" placeholder="Masukkan tanggal">
-                </div>
+<!--                <div class="form-group col-md-12">-->
+<!--                    <label for="tanggal">TANGGAL:</label>-->
+<!--                    <input type="text" name="tgl" id="tanggal" required class="form-control date-picker" placeholder="Masukkan tanggal">-->
+<!--                </div>-->
                 <div class="form-group col-md-12">
                     <button id="search" type="submit" class="genric-btn primary radius mb-30">Hitung Sentimen</button>
                 </div>
@@ -104,13 +104,13 @@
             // placeholder: "Pilih Smartphone",
             // allowClear: true
         });
-        $('#tanggal').daterangepicker({
-            singleDatePicker: true,
-            calender_style: "picker_2",
-            format: 'YYYY-MM-DD'
-        }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
-        });
+        // $('#tanggal').daterangepicker({
+        //     singleDatePicker: true,
+        //     calender_style: "picker_2",
+        //     format: 'YYYY-MM-DD'
+        // }, function (start, end, label) {
+        //     console.log(start.toISOString(), end.toISOString(), label);
+        // });
 
         $("#search").click(function(event) {
             event.preventDefault();

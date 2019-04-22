@@ -22,6 +22,8 @@ class SentimentAnalysis extends CI_Controller{
     {
         $word = $this->input->post('kata');
         $word = $this->textmining_model->preprocessing($word);
+//        var_dump($word);
+//        die();
         $hitung['naivebayes'] = $this->datatrain_model->text_classification_bayes_single($word);
         $this->output->set_content_type('application/json')->set_output(json_encode($hitung));
     }

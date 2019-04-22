@@ -65,7 +65,7 @@ class Smartphone extends CI_Controller {
 						$data['sensors'] = $this->getBetween($grab1[1],'<td class="nfo" data-spec="sensors">','</td>');
                         $data['price'] = $this->getBetween($grab1[1],'<td class="nfo" data-spec="price">About ','</td>');
 						$sensor = explode(",", $data['sensors']);
-						if(!empty($price)){
+						if(!empty($data['price'])){
                             $price = explode(" ", $data['price']);
                             if($price[1] == 'EUR'){
                                 $data['price'] = $data['price'] * 16375;
@@ -78,15 +78,30 @@ class Smartphone extends CI_Controller {
                             // end get spek
                             $cekexist = $this->DataProduk_model->selectwithname($namaproduk);
                             if ($cekexist->num_rows() > 0) {
-                                $this->DataProduk_model->update($data,$namaproduk,$keyword);
+                                $success = $this->DataProduk_model->update($data,$namaproduk,$keyword);
+                                if($success){
+                                    $msg['tipe'] = 'success';
+                                    $msg['msg'] = 'Data berhasil diperbarui';
+                                }else{
+                                    $msg['tipe'] = 'error';
+                                    $msg['msg'] = 'Gagal memperbarui data';
+                                }
                             }else{
-                                $this->DataProduk_model->insert($data,$namaproduk,$keyword,$url,$urlreviews);
+                                $success = $this->DataProduk_model->insert($data,$namaproduk,$keyword,$url,$urlreviews);
+                                if($success){
+                                    $msg['tipe'] = 'success';
+                                    $msg['msg'] = 'Data berhasil disimpan';
+                                }else{
+                                    $msg['tipe'] = 'error';
+                                    $msg['msg'] = 'Gagal menyimpan data';
+                                }
                             }
+                        }else{
+                            $msg['tipe'] = 'error';
+                            $msg['msg'] = 'Harga produk tidak ditemukan';
                         }
 					}
 				}
-				$msg['tipe'] = 'success';
-				$msg['msg'] = 'Data berhasil masuk';
 			}else{
 				$msg['tipe'] = 'error';
 				$msg['msg'] = 'Keyword tidak ditemukan';

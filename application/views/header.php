@@ -29,6 +29,7 @@
                             <ul>
                                 <li class="active"><a href="<?php echo base_url().'textmining'?>">TEXT MINING</a></li>
                                 <li class="active"><a href="<?php echo base_url().'sentimentanalysis'?>">SENTIMENT ANALYSIS</a></li>
+                                <li class="active"><a href="<?php echo base_url().'kategorisasi'?>">KATEGORISASI</a></li>
                             </ul>
                         </li>
                         <li class="active"><a href="<?php echo base_url().'login/logout'?>">Sign Out<b> [

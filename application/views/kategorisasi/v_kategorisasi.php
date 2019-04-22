@@ -9,7 +9,7 @@
 <section id="home">
     <div class="container mt-30 mb-30" style="background-color: #ffffff;border: 1px solid transparent;border-color: #0277bd;padding-right: 0px;padding-left: 0px;">
         <div class="mb-50" style="background-color: #0277bd">
-            <h5 align="center" style="padding-top: 20px; padding-bottom: 20px;color: white">UJI COBA SENTIMENT</h5>
+            <h5 align="center" style="padding-top: 20px; padding-bottom: 20px;color: white">UJI COBA KATEGORISASI</h5>
         </div>
         <div class="container">
             <form id="formsearch" data-parsley-validate action="#" method="POST" class="form-horizontal">
@@ -27,7 +27,7 @@
 
     <div class="container mt-30 mb-30" style="background-color: #ffffff;border: 1px solid transparent;border-color: #0277bd;padding-right: 0px;padding-left: 0px;">
         <div class="mb-50" style="background-color: #0277bd">
-            <h5 align="center" style="padding-top: 20px; padding-bottom: 20px;color: white">HASIL SENTIMENT</h5>
+            <h5 align="center" style="padding-top: 20px; padding-bottom: 20px;color: white">HASIL KATEGORISASI</h5>
         </div>
         <div class="x_content" id="contentsummary" style="padding: 10px">
 
@@ -48,7 +48,7 @@
             $("#loading").html('<center><img src="<?php echo base_url(); ?>assets/images/loading.gif" /></center>');
             var data = $("#formsearch").serialize();
             $.ajax({
-                url: 'SentimentAnalysis/cek_kata_single',
+                url: 'kategorisasi/kategorisasi_kata',
                 type: 'POST',
                 dataType: 'json',
                 data: data
@@ -56,7 +56,7 @@
                 .done(function(resp) {
                     if (resp) {
                         console.info(resp);
-                        var html = '<table border="2" class="table table-striped responsive-utilities jambo_table"><tr><td colspan="3">Metode Nai\'ve Bayes</td></tr><tr><td>Kata</td><td>Index</td><td>Sentiment</td></tr>';
+                        var html = '<table border="2" class="table table-striped responsive-utilities jambo_table"><tr><td colspan="3">Metode Nai\'ve Bayes</td></tr><tr><td>Kata</td><td>Index</td><td>Kategori</td></tr>';
                         for(i=0;i<resp.naivebayes.data.length;i++){
                             html+= '<tr><td>'+resp.naivebayes.data[i].kata+'</td><td>'+resp.naivebayes.data[i].index+'</td><td>'+resp.naivebayes.data[i].sentiment+'</td></tr>';
                         }
@@ -78,11 +78,5 @@
 
             return false;
         });
-
-        // NotifikasiToast({
-        //   type : 'success',
-        //   msg : 'coba toast',
-        //   title: 'Title'
-        // });
     });
 </script>
