@@ -72,7 +72,55 @@ class DataProduk_model extends CI_Model
         $data = $this->db->query($query)->result_array();
         $i = $start + 1;
         $result = array();
+        $jrb=array(0,0,0);
+        $jrl=array(0,0,0);
+        $jrk=array(0,0,0);
+        $jrm=array(0,0,0);
         foreach ($data as $d) {
+            $reviewbat = $this->db->query('SELECT * FROM data_review where m_review_bat > 0 AND m_review_id_produk = '.$d['m_produk_id']);
+            foreach ($reviewbat->result() as $rb) {
+                if($rb->m_review_sentiment == 'POSITIF'){
+                    $jrb[0]++;
+                }elseif ($rb->m_review_sentiment == 'NETRAL'){
+                    $jrb[1]++;
+                }elseif ($rb->m_review_sentiment == 'NEGATIF'){
+                    $jrb[2]++;
+                }
+            }
+
+            $reviewlyr = $this->db->query('SELECT * FROM data_review where m_review_lyr > 0 AND m_review_id_produk = '.$d['m_produk_id']);
+            foreach ($reviewlyr->result() as $rl) {
+                if($rl->m_review_sentiment == 'POSITIF'){
+                    $jrl[0]++;
+                }elseif ($rl->m_review_sentiment == 'NETRAL'){
+                    $jrl[1]++;
+                }elseif ($rl->m_review_sentiment == 'NEGATIF'){
+                    $jrl[2]++;
+                }
+            }
+
+            $reviewkmr = $this->db->query('SELECT * FROM data_review where m_review_kmr > 0 AND m_review_id_produk = '.$d['m_produk_id']);
+            foreach ($reviewkmr->result() as $rk) {
+                if($rk->m_review_sentiment == 'POSITIF'){
+                    $jrk[0]++;
+                }elseif ($rk->m_review_sentiment == 'NETRAL'){
+                    $jrk[1]++;
+                }elseif ($rk->m_review_sentiment == 'NEGATIF'){
+                    $jrk[2]++;
+                }
+            }
+
+            $reviewmsn = $this->db->query('SELECT * FROM data_review where m_review_msn > 0 AND m_review_id_produk = '.$d['m_produk_id']);
+            foreach ($reviewmsn->result() as $rm) {
+                if($rm->m_review_sentiment == 'POSITIF'){
+                    $jrm[0]++;
+                }elseif ($rm->m_review_sentiment == 'NETRAL'){
+                    $jrm[1]++;
+                }elseif ($rm->m_review_sentiment == 'NEGATIF'){
+                    $jrm[2]++;
+                }
+            }
+
             if(strlen($d['m_produk_ram']) > 2){
                 $ram = $d['m_produk_ram']." Mb";
             }else{
@@ -88,12 +136,27 @@ class DataProduk_model extends CI_Model
                     Jumlah Sensor ".$d['m_produk_sensors']."<br>
                     Memori Internal ".$d['m_produk_mem_internal']." Gb <br>
                     Kamera ".$d['m_produk_camera']." Mp";
-            ($d['kategorisasi_done'] == 0) ? $r[4] = '<a href="'.$d['m_produk_url'].'" target="_blank"> Hitung Kategorisasi </a>' : $r[4] = 0;
+            ($d['kategorisasi_done'] == 0) ? $r[4] = "<a class='btn btn-warning btn-sm' onclick='kategorisasi(".$d['m_produk_id'].")'>Hitung Kategorisasi</a>" : $r[4] = "Baterai<br>
+                                                                                                                                                                Positif = ".$jrb[0]."<br>
+                                                                                                                                                                Netral = ".$jrb[1]."<br>
+                                                                                                                                                                Negatif = ".$jrb[2]."<br><br>
+                                                                                                                                                                Layar<br>
+                                                                                                                                                                Positif = ".$jrl[0]."<br>
+                                                                                                                                                                Netral = ".$jrl[1]."<br>
+                                                                                                                                                                Negatif = ".$jrl[2]."<br><br>
+                                                                                                                                                                Kamera<br>
+                                                                                                                                                                Positif = ".$jrk[0]."<br>
+                                                                                                                                                                Netral = ".$jrk[1]."<br>
+                                                                                                                                                                Negatif = ".$jrk[2]."<br><br>
+                                                                                                                                                                Mesin<br>
+                                                                                                                                                                Positif = ".$jrm[0]."<br>
+                                                                                                                                                                Netral = ".$jrm[1]."<br>
+                                                                                                                                                                Negatif = ".$jrm[2];
             $r[5] = "Positif = ".$d['data_pos']."<br>
                      Netral = ".$d['data_net']."<br>
                      Negatif = ".$d['data_neg']."<br><br>
                      <b>Kesimpulan</b> ".$d['data_sentiment'];
-            $r[6] = '<a class="btn btn-info" href="sentimentproduk/detailhasil/'.$d['m_produk_id'].'">Detail Review</a>"';
+            $r[6] = '<a class="btn btn-success btn-sm" href="sentimentproduk/detailhasil/'.$d['m_produk_id'].'">Detail Review</a>"';
             array_push($result, $r);
             $i++;
         }

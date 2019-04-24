@@ -27,7 +27,18 @@ class Kategorisasi extends CI_Controller{
         $this->output->set_content_type('application/json')->set_output(json_encode($hitung));
     }
 
-    function kategorisasi_proses()
+    public function kategorisasi_proses()
+    {
+        $id = $this->input->post('data');
+        $hitung = $this->kategorisasi_model->analyzereview_bayes($id);
+        if($hitung){
+            $msg['tipe'] = 'success';
+            $msg['msg'] = 'Data berhasil diperbarui';
+        }
+        $this->output->set_content_type('application/json')->set_output(json_encode($msg));
+    }
+
+    function kategorisasi_tes()
     {
         $query = array();
         $baterai = array();

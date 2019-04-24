@@ -65,73 +65,106 @@
         //         'url': '//cdn.datatables.net/plug-ins/1.10.19/i18n/Indonesian.json'
         //     }
         // });
-        var table = $('#tabelsmartphone').DataTable({
-            language:{
-                'url': '//cdn.datatables.net/plug-ins/1.10.19/i18n/Indonesian.json'
-            },
-            "columns": [
-                {"orderable":false },
-                {"orderable":false },
-                {"orderable":false },
-                {"orderable":false },
-                {"orderable":false },
-                {"orderable":false },
-                {"orderable":false }
-            ],
-            // pagingType: "bootstrapPager",
-            // "sDom": "Rfrtlip",
-            // pagerSettings: {
-            //     searchOnEnter: true,
-            //     language: "Halaman ~ Dari ~"
-            // },
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "<?php echo base_url(); ?>smartphone/dataSmartphone",
-                type: "POST",
-                data: function (d) {
-
-                }
-            }
-            // paginate: true
-        });
-
-        table.on('xhr.dt', function (e, settings, json) {
-            setTimeout(function () {
-                //initEvent();
-            }, 500);
-        });
-
-        $("#formsearch").submit(function(event) {
-            event.preventDefault();
-            $("#search").text('Loading....');
-            $("#search").attr('disabled',true);
-            $("#loading").html('<center><img src="<?php echo base_url(); ?>assets/images/loading.gif" /></center>');
-            var data = $("#formsearch").serialize();
-            $.ajax({
-                url: 'smartphone/ambilSmartphone',
-                type: 'POST',
-                dataType: 'json',
-                data: data
-            })
-                .done(function(resp) {
-                    NotifikasiToast({
-                        type : resp.tipe,
-                        msg : resp.msg,
-                        title: 'Informasi'
-                    });
-                    table.ajax.reload();
-                })
-                .fail(function() {
-                    console.log("error");
-                })
-                .always(function() {
-                    console.log("complete");
-                    $("#loading").html('');
-                    $("#search").text('Ambil Data');
-                    $("#search").attr('disabled',false);
-                });
-            return false;
-        });
     });
+
+    var table = $('#tabelsmartphone').DataTable({
+        language:{
+            'url': '//cdn.datatables.net/plug-ins/1.10.19/i18n/Indonesian.json'
+        },
+        "columns": [
+            {"orderable":false },
+            {"orderable":false },
+            {"orderable":false },
+            {"orderable":false },
+            {"orderable":false },
+            {"orderable":false },
+            {"orderable":false }
+        ],
+        // pagingType: "bootstrapPager",
+        // "sDom": "Rfrtlip",
+        // pagerSettings: {
+        //     searchOnEnter: true,
+        //     language: "Halaman ~ Dari ~"
+        // },
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "<?php echo base_url(); ?>smartphone/dataSmartphone",
+            type: "POST",
+            data: function (d) {
+
+            }
+        }
+        // paginate: true
+    });
+
+    table.on('xhr.dt', function (e, settings, json) {
+        setTimeout(function () {
+            //initEvent();
+        }, 500);
+    });
+
+    $("#formsearch").submit(function(event) {
+        event.preventDefault();
+        $("#search").text('Loading....');
+        $("#search").attr('disabled',true);
+        $("#loading").html('<center><img src="<?php echo base_url(); ?>assets/images/loading.gif" /></center>');
+        var data = $("#formsearch").serialize();
+        $.ajax({
+            url: 'smartphone/ambilSmartphone',
+            type: 'POST',
+            dataType: 'json',
+            data: data
+        })
+            .done(function(resp) {
+                NotifikasiToast({
+                    type : resp.tipe,
+                    msg : resp.msg,
+                    title: 'Informasi'
+                });
+                table.ajax.reload();
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+                $("#loading").html('');
+                $("#search").text('Ambil Data');
+                $("#search").attr('disabled',false);
+            });
+        return false;
+    });
+
+    function kategorisasi(id) {
+        // alert(id);
+        event.preventDefault();
+        $("#search").text('Loading....');
+        $("#search").attr('disabled',true);
+        $("#loading").html('<center><img src="<?php echo base_url(); ?>assets/images/loading.gif" /></center>');
+        $.ajax({
+            url: 'kategorisasi/kategorisasi_proses',
+            type: 'POST',
+            data: {data: id}
+        })
+            .done(function(resp) {
+                NotifikasiToast({
+                    type : resp.tipe,
+                    msg : resp.msg,
+                    title: 'Informasi'
+                });
+                table.ajax.reload();
+                // console.log(resp.msg);
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+                $("#loading").html('');
+                $("#search").text('Ambil Data');
+                $("#search").attr('disabled',false);
+            });
+        return false;
+    }
 </script>
