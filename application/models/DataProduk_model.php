@@ -61,7 +61,7 @@ class DataProduk_model extends CI_Model
         }
 
         if($order[0]['column']){
-            $query.= " order by 
+            $query.= " order by
                 ".$dataorder[$order[0]["column"]]." ".$order[0]["dir"];
         }
 
@@ -72,11 +72,11 @@ class DataProduk_model extends CI_Model
         $data = $this->db->query($query)->result_array();
         $i = $start + 1;
         $result = array();
-        $jrb=array(0,0,0);
-        $jrl=array(0,0,0);
-        $jrk=array(0,0,0);
-        $jrm=array(0,0,0);
         foreach ($data as $d) {
+            $jrb=array(0,0,0);
+            $jrl=array(0,0,0);
+            $jrk=array(0,0,0);
+            $jrm=array(0,0,0);
             $reviewbat = $this->db->query('SELECT * FROM data_review where m_review_bat > 0 AND m_review_id_produk = '.$d['m_produk_id']);
             foreach ($reviewbat->result() as $rb) {
                 if($rb->m_review_sentiment == 'POSITIF'){
@@ -130,7 +130,7 @@ class DataProduk_model extends CI_Model
             $r[0] = $i;
             $r[1] = '<a href="'.$d['m_produk_url'].'" target="_blank">'.$d['m_produk_nama'].'</a>';
             $r[2] = $this->rupiah($d['m_produk_harga']);
-            $r[3] = "Ukuran Layar ".$d['m_produk_screen_size']."Inch <br>
+            $r[3] = "Ukuran Layar ".$d['m_produk_screen_size']." Inch <br>
                     Ram ".$ram."<br>
                     Baterai ".$d['m_produk_battery']." Mah <br>
                     Jumlah Sensor ".$d['m_produk_sensors']."<br>
@@ -155,7 +155,7 @@ class DataProduk_model extends CI_Model
             $r[5] = "Positif = ".$d['data_pos']."<br>
                      Netral = ".$d['data_net']."<br>
                      Negatif = ".$d['data_neg']."<br><br>
-                     <b>Kesimpulan</b> ".$d['data_sentiment'];
+                     <b>Kesimpulan</b><br>".$d['data_sentiment'];
             $r[6] = '<a class="btn btn-success btn-sm" href="sentimentproduk/detailhasil/'.$d['m_produk_id'].'">Detail Review</a>"';
             array_push($result, $r);
             $i++;
@@ -178,5 +178,16 @@ class DataProduk_model extends CI_Model
     {
         $data = $this->db->get('data_produk');
         return $data;
+    }
+
+    public function getProdukByRangeHarga($harga_min, $harga_max)
+    {
+        $query = $this->db->query("SELECT * FROM data_produk WHERE m_produk_harga BETWEEN '".$harga_min."' AND '".$harga_max."' ORDER BY m_produk_harga");
+        return $query;
+    }
+
+    function getHasil($id_hasil){
+        $query = $this->db->query("SELECT * FROM data_produk WHERE m_produk_id IN (".$id_hasil.") ORDER BY FIELD(m_produk_id,".$id_hasil.")");
+        return $query->result();
     }
 }

@@ -35,8 +35,8 @@
             <table id="tabelsmartphone" class="table table-striped responsive-utilities jambo_table">
                 <thead>
                 <tr>
-                    <th width="100px">No</th>
-                    <th width="250px">Nama Produk </th>
+                    <th width="50px">No</th>
+                    <th width="100px">Nama Produk </th>
                     <th>Harga </th>
                     <th>Spesifikasi </th>
                     <th>Kategorisasi </th>

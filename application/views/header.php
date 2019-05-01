@@ -17,6 +17,7 @@
                 <ul class="nav-menu">
                     <li><a href="<?php echo base_url().'page'?>">DASHBOARD</a></li>
                     <?php if($this->session->userdata('masuk') == TRUE):?>
+                        <li class="active"><a href="<?php echo base_url().'rekomendasi'?>">SISTEM REKOMENDASI</a></li>
                         <li class="active"><a href="<?php echo base_url().'sentimentproduk'?>">SENTIMENT SMARTPHONE</a></li>
                         <li class="menu-has-children">
                             <a>MASTER</a>
