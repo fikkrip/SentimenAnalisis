@@ -137,6 +137,7 @@ class DataReview_model extends CI_Model
         $dataupdate['data_neg'] = $searchneg;
         $dataupdate['data_net'] = $searchnet;
         $dataupdate['data_sentiment'] = $sentiment;
+        $dataupdate['kategorisasi_done'] = 0;
         date_default_timezone_set("Asia/Bangkok");
         $dataupdate['tanggal_sentiment'] = date("Y-m-d");
         $this->db->where('m_produk_id', $idproduk);

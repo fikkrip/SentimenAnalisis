@@ -28,6 +28,7 @@ class Rekomendasi extends CI_Controller{
                 }
 
                 $internal = max($produk->m_produk_mem_internal, $produk->m_produk_mem_internal1, $produk->m_produk_mem_internal2);
+                $sentimen = $produk->data_pos - $produk->data_neg;
 
                 $produk_criteria_layer = array(
                     "id_produk" => $produk->m_produk_id,
@@ -37,10 +38,45 @@ class Rekomendasi extends CI_Controller{
                     "kamera" => $produk->m_produk_camera,
                     "layar" => $produk->m_produk_screen_size,
                     "baterai" => $produk->m_produk_battery,
-                    "sentimen" => $produk->data_pos
+                    "sentimen" => $sentimen
                 );
                 array_push($produk_criteria_array, $produk_criteria_layer);
             }
+            return $produk_criteria_array;
+        }
+    }
+
+    function transformCriteriaTesting(){
+        $produk_criteria_array = array();
+        $query_produk = $this->DataProduk_model->getProdukById();
+
+        if($query_produk->num_rows() == null){
+            return "300";
+        }else{
+            $i = 0;
+            foreach ($query_produk->result() as $produk){
+                if ($produk->m_produk_ram == '512'){
+                    $produk->m_produk_ram = '0.5';
+                }
+
+                $internal = max($produk->m_produk_mem_internal, $produk->m_produk_mem_internal1, $produk->m_produk_mem_internal2);
+                $sentimen = $produk->data_pos - $produk->data_neg;
+
+                $produk_criteria_layer = array(
+                    "id_produk" => $produk->m_produk_id,
+                    "harga" => $produk->m_produk_harga,
+                    "ram" => $produk->m_produk_ram,
+                    "internal" => $internal,
+                    "kamera" => $produk->m_produk_camera,
+                    "layar" => $produk->m_produk_screen_size,
+                    "baterai" => $produk->m_produk_battery,
+                    "sentimen" => $sentimen
+                );
+                array_push($produk_criteria_array, $produk_criteria_layer);
+                $i++;
+            }
+//            var_dump($produk_criteria_array);
+//            die();
             return $produk_criteria_array;
         }
     }
@@ -267,26 +303,36 @@ class Rekomendasi extends CI_Controller{
     }
 
     //dikali pembobotan
-    function ranking($matrix){
-        $bobot_harga = 15;
-        $bobot_ram = 15;
-        $bobot_internal = 15;
-        $bobot_kamera = 15;
-        $bobot_layar = 10;
-        $bobot_baterai = 15;
-        $bobot_sentimen = 15;
-
+    function ranking($matrix, $dataForm){
         $ranking = array();
         foreach ($matrix as $key => $item){
-            $harga_val = $item['harga'] * $bobot_harga;
-            $ram_val = $item['ram'] * $bobot_ram;
-            $internal_val = $item['internal'] * $bobot_internal;
-            $kamera_val = $item['kamera'] * $bobot_kamera;
-            $layar_val = $item['layar'] * $bobot_layar;
-            $baterai_val = $item['baterai'] * $bobot_baterai;
-            $sentimen_val = $item['sentimen'] * $bobot_sentimen;
+            $harga_val = $item['harga'] * $dataForm['p_harga'];
+            $ram_val = $item['ram'] * $dataForm['p_ram'];
+            $internal_val = $item['internal'] * $dataForm['p_internal'];
+            $kamera_val = $item['kamera'] * $dataForm['p_kamera'];
+            $layar_val = $item['layar'] * $dataForm['p_layar'];
+            $baterai_val = $item['baterai'] * $dataForm['p_baterai'];
+            $sentimen_val = $item['sentimen'] * $dataForm['p_sentimen'];
 
             $total_val = $harga_val + $ram_val + $internal_val + $kamera_val + $layar_val + $baterai_val + $sentimen_val ;
+            array_push($ranking, $total_val);
+        }
+
+        return $ranking;
+    }
+
+    function ranking_without_sentiment($matrix){
+        $ranking = array();
+        foreach ($matrix as $key => $item){
+            $harga_val = $item['harga'] * 15;
+            $ram_val = $item['ram'] * 15;
+            $internal_val = $item['internal'] * 15;
+            $kamera_val = $item['kamera'] * 15;
+            $layar_val = $item['layar'] * 10;
+            $baterai_val = $item['baterai'] * 15;
+            $sentimen_val = $item['sentimen'] * 15;
+
+            $total_val = $harga_val + $ram_val + $internal_val + $kamera_val + $layar_val + $baterai_val + $sentimen_val;
             array_push($ranking, $total_val);
         }
 
@@ -310,8 +356,8 @@ class Rekomendasi extends CI_Controller{
         return $highest_rec;
     }
 
-    function rekomendasi($harga_min, $harga_max){
-        $produk_criteria_array = $this->transformCriteria($harga_min, $harga_max);
+    function rekomendasi($dataForm){
+        $produk_criteria_array = $this->transformCriteria($dataForm['harga_min'], $dataForm['harga_max']);
 //        var_dump($produk_criteria_array);
 
         if($produk_criteria_array != "300"){
@@ -324,7 +370,31 @@ class Rekomendasi extends CI_Controller{
             $produk_normalisasi = $this->normalisasi($produk_fuzzy, $produk_minmax);
 //            var_dump($produk_normalisasi);
 
-            $produk_score = $this->ranking($produk_normalisasi);
+            $produk_score = $this->ranking($produk_normalisasi, $dataForm);
+//            var_dump($produk_score);
+
+            $recommended_value = $this->recommended($produk_score, $produk_criteria_array);
+            return $recommended_value;
+        }else{
+            return '300';
+        }
+    }
+
+    function rekomendasiTesting(){
+        $produk_criteria_array = $this->transformCriteriaTesting();
+//        var_dump($produk_criteria_array);
+
+        if($produk_criteria_array != "300"){
+            $produk_fuzzy = $this->criteriaToFuzzy($produk_criteria_array);
+//             var_dump($produk_fuzzy);
+
+            $produk_minmax = $this->getMinMax($produk_fuzzy);
+//            var_dump($produk_minmax);
+
+            $produk_normalisasi = $this->normalisasi($produk_fuzzy, $produk_minmax);
+//            var_dump($produk_normalisasi);
+
+            $produk_score = $this->ranking_without_sentiment($produk_normalisasi);
 //            var_dump($produk_score);
 
             $recommended_value = $this->recommended($produk_score, $produk_criteria_array);
@@ -335,30 +405,116 @@ class Rekomendasi extends CI_Controller{
     }
 
     function tampilHasilRekomendasi(){
-        $harga_min = $_POST['harga_min'];
-        $harga_max = $_POST['harga_max'];
+        $dataForm = array(
+            'harga_min'  => $_POST['harga_min'],
+            'harga_max'  => $_POST['harga_max'],
+            'p_harga'    => $_POST['p_harga'],
+            'p_layar'    => $_POST['p_layar'],
+            'p_internal' => $_POST['p_internal'],
+            'p_ram'      => $_POST['p_ram'],
+            'p_baterai'  => $_POST['p_baterai'],
+            'p_kamera'   => $_POST['p_kamera'],
+            'p_sentimen' => $_POST['p_sentimen']
+        );
 
-        $hasil = $this->rekomendasi($harga_min, $harga_max);
+        $hasil = $this->rekomendasi($dataForm);
+//        $hasil = $this->rekomendasiTesting();
+//        var_dump($hasil);
+//        die();
         if($hasil != '300'){
             $id_hasil = array();
             $skor_hasil = array();
             foreach ($hasil as $row){
                 array_push($id_hasil, $row['id_produk']);
-                array_push($skor_hasil, $row['score_produk']);
+                array_push($skor_hasil, array($row['id_produk'],$row['score_produk']));
             }
             $string_id = implode(",",$id_hasil);
 
             //        var_dump(implode(",",$id_hasil));
             //        die();
 
+//            var_dump($hasil);
+//            die();
+
             $data['query'] = $this->DataProduk_model->getHasil($string_id);
+            $data['dataForm'] = $dataForm;
+            $data['string_id'] = $string_id;
             $data['skor'] = $skor_hasil;
-//        var_dump($data);
-//        die();
+            $data['sort_by'] = 0;
             $this->load->view('rekomendasi/v_tampilhasil', $data);
         }else{
             $output = 'Data tidak ditemukan silahkan, '.'<a href="'. base_url() .'rekomendasi">coba lagi!!!</a>';
             print ($output);
         }
+    }
+
+    function print_r_reverse($in) {
+        $lines = explode("\n", trim($in));
+        if (trim($lines[0]) != 'Array') {
+            // bottomed out to something that isn't an array
+            return $in;
+        } else {
+            // this is an array, lets parse it
+            if (preg_match("/(\s{5,})\(/", $lines[1], $match)) {
+                // this is a tested array/recursive call to this function
+                // take a set of spaces off the beginning
+                $spaces = $match[1];
+                $spaces_length = strlen($spaces);
+                $lines_total = count($lines);
+                for ($i = 0; $i < $lines_total; $i++) {
+                    if (substr($lines[$i], 0, $spaces_length) == $spaces) {
+                        $lines[$i] = substr($lines[$i], $spaces_length);
+                    }
+                }
+            }
+            array_shift($lines); // Array
+            array_shift($lines); // (
+            array_pop($lines); // )
+            $in = implode("\n", $lines);
+            // make sure we only match stuff with 4 preceding spaces (stuff for this array and not a nested one)
+            preg_match_all("/^\s{4}\[(.+?)\] \=\> /m", $in, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+            $pos = array();
+            $previous_key = '';
+            $in_length = strlen($in);
+            // store the following in $pos:
+            // array with key = key of the parsed array's item
+            // value = array(start position in $in, $end position in $in)
+            foreach ($matches as $match) {
+                $key = $match[1][0];
+                $start = $match[0][1] + strlen($match[0][0]);
+                $pos[$key] = array($start, $in_length);
+                if ($previous_key != '') $pos[$previous_key][1] = $match[0][1] - 1;
+                $previous_key = $key;
+            }
+            $ret = array();
+            foreach ($pos as $key => $where) {
+                // recursively see if the parsed out value is an array too
+                $ret[$key] = $this->print_r_reverse(substr($in, $where[0], $where[1] - $where[0]));
+            }
+            return $ret;
+        }
+    }
+
+    function tampilHasilSort(){
+//        var_dump($_POST);
+//        die();
+        $sort_by = $_POST['sort_by'];
+        $string_id = $_POST['string_id'];
+        $skor_hasil = $_POST['skor'];
+
+        $skor_hasil_new = $this->print_r_reverse($skor_hasil);
+
+        if($sort_by == 0){
+            $data['query'] = $this->DataProduk_model->getHasil($string_id);
+        }else{
+            $data['query'] = $this->DataProduk_model->getHasilSort($string_id, $sort_by);
+        }
+
+        $data['sort_by'] = $sort_by;
+        $data['string_id'] = $string_id;
+        $data['skor'] = $skor_hasil_new;
+        var_dump($data);
+        die();
+        $this->load->view('rekomendasi/v_tampilhasil', $data);
     }
 }

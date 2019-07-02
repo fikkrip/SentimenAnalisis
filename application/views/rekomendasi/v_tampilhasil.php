@@ -9,12 +9,39 @@
 <!-- start banner Area -->
 <section id="home">
     <div class="container" style="margin-bottom: 20px">
-        <div style="margin-top: 20px"><button class="btn btn-info btn-small"><a style="color: white" href="<?= base_url()?>rekomendasi">Coba Rekomendasi Lain</a></button></div>
+        <div style="margin-top: 20px">
+            <button class="btn btn-info btn-small"><a style="color: white;" href="<?= base_url()?>rekomendasi">Coba Rekomendasi Lain</a></button>
+            <form action="<?php echo base_url().'rekomendasi/tampilHasilSort'?>" method="POST">
+                <label style="margin-top: 20px" for="sort_by">Sort by: </label>
+                <select class="form-control" id="sort_by" name="sort_by" onchange="this.form.submit();">
+                    <option class="form-control" value="0" <?= ($sort_by == 0) ? 'selected' : ''?> >Skor Rekomendasi</option>
+                    <option class="form-control" value="1" <?= ($sort_by == 1) ? 'selected' : ''?> >Baterai</option>
+                    <option class="form-control" value="2" <?= ($sort_by == 2) ? 'selected' : ''?> >Kamera</option>
+                    <option class="form-control" value="3" <?= ($sort_by == 3) ? 'selected' : ''?> >Layar</option>
+                    <option class="form-control" value="4" <?= ($sort_by == 4) ? 'selected' : ''?> >RAM</option>
+                </select>
+                <input type="hidden" name="string_id" value="<?= $string_id ?>" />
+                <input type="hidden" name="skor" value="<?php  print_r($skor) ?>" />
+            </form>
+        </div>
         <h2 style="margin-top: 10px; margin-bottom: 20px; text-align: center">Tabel Hasil Rekomendasi</h2>
+
+        <hr style="border: 0; border-top: 3px double #8c8c8c; ">
+        <h5>Range Harga = <?= "Rp " . number_format($dataForm['harga_min'],2,',','.')." - "."Rp " . number_format($dataForm['harga_max'],2,',','.'); ?></h5>
+        <h5 style="margin-top: 10px; color: #0000FF">Prosentase Prioritas</h5>
+        <h6>Harga           = <?= $dataForm['p_harga'] ?>%</h6>
+        <h6>Layar           = <?= $dataForm['p_layar'] ?>%</h6>
+        <h6>RAM             = <?= $dataForm['p_ram'] ?>%</h6>
+        <h6>Memori Internal = <?= $dataForm['p_internal'] ?>%</h6>
+        <h6>Kamera          = <?= $dataForm['p_kamera'] ?>%</h6>
+        <h6>Baterai         = <?= $dataForm['p_baterai'] ?>%</h6>
+        <h6 style="margin-bottom: 20px">Nilai Sentimen  = <?= $dataForm['p_sentimen'] ?>%</h6>
+        <hr style="border: 0; border-top: 3px double #8c8c8c; ">
+
         <table id="tabelsmartphone" class="table table-striped responsive-utilities jambo_table">
             <thead>
             <tr style="color: white" bgcolor="#0277bd">
-                <th width="50px">No</th>
+                <th>Peringkat</th>
                 <th width="100px">Nama Produk </th>
                 <th>Harga </th>
                 <th>Skor Rekomendasi </th>
@@ -84,13 +111,18 @@
                 ?>
                 <tr>
                     <td><?php echo $i+1; $i++;?></td>
-                    <td><a href="<?= $row->m_produk_url ?>"><?= $row->m_produk_nama ?></a></td>
+                    <td><a target="_blank" href="<?= $row->m_produk_url ?>"><?= $row->m_produk_nama ?></a></td>
                     <td><?php echo "Rp " . number_format($row->m_produk_harga,2,',','.'); ?></td>
-                    <td><?php echo $skor[$i-1]; ?></td>
+                    <td><?php
+                            foreach ($skor as $s){
+                                if (floatval($s[0]) == $row->m_produk_id){
+                                    echo $s[1];
+                                }
+                            }
+                        ?></td>
                     <td><?php echo "Ukuran Layar ".$row->m_produk_screen_size." Inch <br>
                                     Ram ".$ram."<br>
                                     Baterai ".$row->m_produk_battery." Mah <br>
-                                    Jumlah Sensor ".$row->m_produk_sensors."<br>
                                     Memori Internal ".$row->m_produk_mem_internal." Gb <br>
                                     Kamera ".$row->m_produk_camera." Mp"; ?>
                     </td>
@@ -116,11 +148,11 @@
                         <?php echo "Positif = ".$row->data_pos."<br>
                                     Netral = ".$row->data_net."<br>
                                     Negatif = ".$row->data_neg."<br><br>
-                                    <b>Kesimpulan</b><br>".$row->data_sentiment;
+                                    <b>Kesimpulan</b><br>Skor = ".($row->data_pos - $row->data_neg)."<br>".$row->data_sentiment;
                         ?>
                     </td>
                     <td>
-                        <?php echo '<a class="btn btn-success btn-sm" target="_blank" href="'.base_url().'sentimentproduk/detailhasil/'.$row->m_produk_id.'">Detail Review</a>"' ?>
+                        <?php echo '<a class="btn btn-success btn-sm" target="_blank" href="'.base_url().'sentimentproduk/detailhasil/'.$row->m_produk_id.'">Detail Review</a>' ?>
                     </td>
                 </tr>
             <?php } ?>

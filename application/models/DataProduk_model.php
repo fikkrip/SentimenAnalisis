@@ -21,7 +21,8 @@ class DataProduk_model extends CI_Model
                             m_produk_mem_internal = '".(@$storage[0] ? $storage[0] : 0)."',
                             m_produk_mem_internal1 = '".(@$storage[1] ? $storage[1] : 0)."',
                             m_produk_mem_internal2 = '".(@$storage[2] ? $storage[2] : 0)."',
-                            m_produk_harga = '".$data['price']."' where m_produk_nama = '".$namaproduk."'");
+                            m_produk_harga = '".$data['price']."',
+                            kategorisasi_done = 0 where m_produk_nama = '".$namaproduk."'");
         return $query;
     }
 
@@ -42,7 +43,8 @@ class DataProduk_model extends CI_Model
 							'',
 							'',
 							NULL,
-							NULL)");
+							NULL,
+							0)");
         return $query;
     }
 
@@ -128,12 +130,11 @@ class DataProduk_model extends CI_Model
             }
             $r = array();
             $r[0] = $i;
-            $r[1] = '<a href="'.$d['m_produk_url'].'" target="_blank">'.$d['m_produk_nama'].'</a>';
+            $r[1] = '<a target="_blank" href="'.$d['m_produk_url'].'" target="_blank">'.$d['m_produk_nama'].'</a>';
             $r[2] = $this->rupiah($d['m_produk_harga']);
             $r[3] = "Ukuran Layar ".$d['m_produk_screen_size']." Inch <br>
                     Ram ".$ram."<br>
                     Baterai ".$d['m_produk_battery']." Mah <br>
-                    Jumlah Sensor ".$d['m_produk_sensors']."<br>
                     Memori Internal ".$d['m_produk_mem_internal']." Gb <br>
                     Kamera ".$d['m_produk_camera']." Mp";
             ($d['kategorisasi_done'] == 0) ? $r[4] = "<a class='btn btn-warning btn-sm' onclick='kategorisasi(".$d['m_produk_id'].")'>Hitung Kategorisasi</a>" : $r[4] = "Baterai<br>
@@ -155,8 +156,8 @@ class DataProduk_model extends CI_Model
             $r[5] = "Positif = ".$d['data_pos']."<br>
                      Netral = ".$d['data_net']."<br>
                      Negatif = ".$d['data_neg']."<br><br>
-                     <b>Kesimpulan</b><br>".$d['data_sentiment'];
-            $r[6] = '<a class="btn btn-success btn-sm" href="sentimentproduk/detailhasil/'.$d['m_produk_id'].'">Detail Review</a>"';
+                     <b>Kesimpulan</b><br>Skor = ".($d['data_pos']-$d['data_neg'])."<br>".$d['data_sentiment'];
+            $r[6] = '<a class="btn btn-success btn-sm" target="_blank" href="sentimentproduk/detailhasil/'.$d['m_produk_id'].'">Detail Review</a>';
             array_push($result, $r);
             $i++;
         }
@@ -186,8 +187,30 @@ class DataProduk_model extends CI_Model
         return $query;
     }
 
+    public function getProdukById()
+    {
+        $query = $this->db->query("SELECT * FROM data_produk WHERE m_produk_id IN (123, 125, 127, 129, 155, 157, 160, 162, 165, 169) ORDER BY m_produk_harga");
+        return $query;
+    }
+
     function getHasil($id_hasil){
         $query = $this->db->query("SELECT * FROM data_produk WHERE m_produk_id IN (".$id_hasil.") ORDER BY FIELD(m_produk_id,".$id_hasil.")");
+        return $query->result();
+    }
+
+    function getHasilSort($id_hasil,$id_order_by){
+        $order_by = '';
+
+        if($id_order_by == 1){
+            $order_by = 'm_produk_battery';
+        }elseif ($id_order_by == 2){
+            $order_by = 'm_produk_camera';
+        }elseif ($id_order_by == 3){
+            $order_by = 'm_produk_screen_size';
+        }elseif ($id_order_by == 4){
+            $order_by = 'm_produk_ram';
+        }
+        $query = $this->db->query("SELECT * FROM data_produk WHERE m_produk_id IN (".$id_hasil.") ORDER BY ".$order_by." DESC");
         return $query->result();
     }
 }

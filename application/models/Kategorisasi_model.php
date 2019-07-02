@@ -138,6 +138,7 @@ class Kategorisasi_model extends CI_Model{
     {
         $result = array();
         $result['data'] = array();
+        $result['kesimpulan'] = "";
         $getstopword = $this->db->get('stopwords');
         $stopword = array();
         foreach ($getstopword->result() as $r) {
