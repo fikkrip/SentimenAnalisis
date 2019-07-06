@@ -31,7 +31,9 @@
         </div>
         <div class="container">
             <p style="text-align:justify; margin-bottom: 50px">
-                Pada penelitian ini, dibuat sistem rekomendasi berbasis web untuk memberikan rekomendasi pilihan produk untuk masyarakat dengan cara opinion mining berbasis temporal sentiment analysis yang akan di intergrasikan dengan decision support systems. Sistem rekomendasi ini memanfaatkan review yang ada pada website dan kemudian melakukan mining pada review tersebut secara temporal dengan menganalisa sentimen pada review produk tersebut, yang selanjutnya nilai sentimen tersebut dijadikan sebagai salah satu atribut/kriteria dalam perhitungan SPK. Sehingga menghasilkan perankingan rekomendasi produk yang berguna bagi calon pembeli dan penjual produk smartphone. Aplikasi ini ditujukan untuk masyarakat sebagai calon pembeli agar dapat dengan mudah mengetahui smartphone apa saja yang sesuai dengan budget dan keinginan mereka. Selain itu, hasil dari aplikasi ini juga akan digunakan untuk menampilkan tren terhadap suatu produk smartphone, sehingga para pemilik toko online atau distributor suatu produk dapat dengan mudah mengetahui produk yang sedang populer tersebut di masyarakat sebagai rekomendasi untuk penambahan stok.
+                Pada penelitian ini, dibuat sistem rekomendasi berbasis web untuk memberikan rekomendasi pilihan produk untuk masyarakat dengan cara opinion mining berbasis sentiment analysis yang akan di intergrasikan dengan decision support systems.
+                Sistem rekomendasi ini memanfaatkan review yang ada pada website dan kemudian melakukan mining pada review tersebut dengan menganalisa sentimen pada review produk tersebut, yang selanjutnya nilai sentimen tersebut dijadikan sebagai salah satu atribut/kriteria dalam perhitungan SPK. Sehingga menghasilkan perankingan rekomendasi produk yang berguna bagi calon pembeli dan penjual produk smartphone.
+                Aplikasi ini ditujukan untuk masyarakat sebagai calon pembeli agar dapat dengan mudah mengetahui smartphone apa saja yang sesuai dengan budget dan keinginan mereka.
             </p>
         </div>
     </div>
