@@ -116,7 +116,7 @@
                     <td><?php
                             foreach ($skor as $s){
                                 if (floatval($s[0]) == $row->m_produk_id){
-                                    echo $s[1];
+                                    echo number_format($s[1],2);
                                 }
                             }
                         ?></td>
